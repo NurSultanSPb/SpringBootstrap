@@ -25,6 +25,6 @@ public class UserController {
         String username = userDetails.getUsername();
         User user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
-        return "user";
+        return "userPage";
     }
 }

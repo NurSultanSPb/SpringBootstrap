@@ -5,6 +5,8 @@ import com.example.springbootdemo.model.User;
 import com.example.springbootdemo.service.RoleService;
 import com.example.springbootdemo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,63 +30,33 @@ public class AdminController {
     }
 
     @GetMapping
-    public String getAllUsers(Model model) {
-        model.addAttribute("people", userService.getAllUsers());
-        return "list";
+    public String getAllUsers(@AuthenticationPrincipal UserDetails userDetails,
+                              Model model) {
+        String username = userDetails.getUsername();
+        User user = userService.findUserByUsername(username);
+        model.addAttribute("user", user);
+        model.addAttribute("allRoles", roleService.getAllRoles());
+        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("newUser", new User());
+        return "newView";
     }
 
-    @GetMapping("/{id}")
-    public String getUserById(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", userService.getUserById(id));
-        return "show";
-    }
-
-    @GetMapping("/new")
-    public String newPerson(Model model) {
-        model.addAttribute("person", new User());
-        model.addAttribute("roles", roleService.getAllRoles());
-        return "new";
-    }
-
-    @PostMapping
-    public String create(@ModelAttribute("person") @Valid User person,
-                         BindingResult bindingResult,
-                         @RequestParam(value = "role") String[] roleNames) {
-
-        if (bindingResult.hasErrors()) {
-            return "new";
-        }
-
+    @PostMapping("/new")
+    public String create(@ModelAttribute("userNew") @Valid User person,
+                         @RequestParam(value = "roleNames") String[] roleNames) {
         userService.saveUser(person, roleNames);
         return "redirect:/admin";
     }
 
-    @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("person", userService.getUserById(id));
-        model.addAttribute("roles", roleService.getAllRoles());
-        return "edit";
-    }
-
-    @PatchMapping("/{id}")
-    public String update(@ModelAttribute("person") @Valid User person,
-                         BindingResult bindingResult,
+    @PatchMapping("edit/{id}")
+    public String update(@ModelAttribute("user") @Valid User person,
                          @PathVariable("id") int id,
-                         @RequestParam(value = "role") String[] roleNames) {
-        if (bindingResult.hasErrors()) {
-            return "edit";
-        }
-        //перенести этот цикл в метод сервиса!
-//        Set<Role> roles = new HashSet<>();
-//        for (String role : roleNames) {
-//            roles.add(roleService.getByName(role));
-//        }
-//        person.setRoles(roles);
+                         @RequestParam(value = "nameRoles") String[] roleNames) {
         userService.update(id, person, roleNames);
         return "redirect:/admin";
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     public String delete(@PathVariable("id") int id) {
         userService.delete(id);
         return "redirect:/admin";

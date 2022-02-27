@@ -19,8 +19,8 @@
     <form class="form-inline">
         <strong><span class="navbar-text text-white" th:text="${user.username}" }></span></strong>
         <span class="navbar-text text-white">&nbspwith roles:&nbsp</span>
-        <span class="navbar-text text-white"><a th:each="role: ${user.getSetRoles()}"
-                                                th:text="${role.getRoleName()}+' '"></a> </span>
+        <span class="navbar-text text-white"><a th:each="role: ${user.getRoles()}"
+                                                th:text="${role.getName()}+' '"></a> </span>
     </form>
     <ul class="navbar-nav float-lg-end">
         <li class="nav-item">
@@ -70,8 +70,10 @@
                                     <thead>
                                     <tr>
                                         <th th:width="50">UserId</th>
-                                        <th th:width="120">FistName</th>
-                                        <th th:width="120">Email</th>
+                                        <th th:width="120">Name</th>
+                                        <th th:width="120">Surname</th>
+                                        <th th:width="150">City</th>
+                                        <th th:width="150">Age</th>
                                         <th th:width="150">Username</th>
                                         <th th:width="150">Roles</th>
                                         <th th:width="50">Edit</th>
@@ -82,10 +84,12 @@
                                     <tr th:each="user : ${users}">
 
                                         <td th:utext="${user.id}" Id></td>
-                                        <td th:utext="${user.firstName}">Name</td>
-                                        <td th:utext="${user.email}">Email</td>
+                                        <td th:utext="${user.name}">Name</td>
+                                        <td th:utext="${user.surname}">Surname</td>
+                                        <td th:utext="${user.city}">City</td>
+                                        <td th:utext="${user.age}">Age</td>
                                         <td th:utext="${user.username}">Username</td>
-                                        <td><a th:each="role : ${user.getSetRoles()}" th:text="${role.roleName} + ' '">
+                                        <td><a th:each="role : ${user.getRoles()}" th:text="${role.getName()} + ' '">
                                 </a>
                                         </td>
                                         <td>
@@ -115,16 +119,27 @@
                                                                     <input type="number" class="form-control"
                                                                            th:value="${user.id}"
                                                                            id="idE" name="id" readonly>
-                                                                    <strong><label for="firstName">Fist
-                                                                        name</label></strong><br>
+                                                                    <strong><label for="nameOne">Name</label></strong><br>
                                                                     <input type="text" class="form-control"
-                                                                           th:value="${user.firstName}"
-                                                                           id="firstName" name="firstName" required>
+                                                                           th:value="${user.name}"
+                                                                           id="nameOne" name="name" required>
                                                                     <strong><label
-                                                                            for="emailE">Email</label></strong><br>
-                                                                    <input type="email" class="form-control"
-                                                                           th:value="${user.email}"
-                                                                           name="email" id="emailE"
+                                                                            for="surnameE">Surname</label></strong><br>
+                                                                    <input type="text" class="form-control"
+                                                                           th:value="${user.surname}"
+                                                                           name="surname" id="surnameE"
+                                                                           required>
+                                                                    <strong><label
+                                                                            for="cityE">City</label></strong><br>
+                                                                    <input type="text" class="form-control"
+                                                                           th:value="${user.city}" id="cityE"
+                                                                           name="city"
+                                                                           required>
+                                                                    <strong><label
+                                                                            for="ageE">Age</label></strong><br>
+                                                                    <input type="text" class="form-control"
+                                                                           th:value="${user.age}" id="ageE"
+                                                                           name="age"
                                                                            required>
                                                                     <strong><label
                                                                             for="usernameE">Username</label></strong><br>
@@ -141,8 +156,8 @@
                                                                     <select multiple class="form-control w-100"
                                                                             id="rolesEdit" name="nameRoles">
                                                                         <option th:each="role : ${allRoles}"
-                                                                                th:value="${role.getRoleName()}"
-                                                                                th:text="${role.getRoleName()}">
+                                                                                th:value="${role.getName()}"
+                                                                                th:text="${role.getName()}">
                                                                         </option>
                                                                     </select>
                                                                     <!-- Modal footer -->
@@ -185,17 +200,22 @@
                                                                     <input type="number" class="form-control"
                                                                            th:value="${user.id}"
                                                                            id="idDel" name="id" readonly>
-                                                                    <strong><label for="firstNameDel">Fist
-                                                                        name</label></strong><br>
+                                                                    <strong><label for="nameDel">Name</label></strong><br>
                                                                     <input type="text" class="form-control"
-                                                                           th:value="${user.firstName}" id="firstNameDel"
-                                                                           name="firstName" readonly>
-                                                                    <strong><label
-                                                                            for="emailDel">Email</label></strong><br>
-                                                                    <input type="email" class="form-control"
-                                                                           th:value="${user.email}" id="emailDel"
-                                                                           name="email"
-                                                                           readonly>
+                                                                           th:value="${user.name}" id="nameDel"
+                                                                           name="name" readonly>
+                                                                    <strong><label for="surnameDel">Surname</label></strong><br>
+                                                                    <input type="text" class="form-control"
+                                                                           th:value="${user.surname}" id="surnameDel"
+                                                                           name="surname" readonly>
+                                                                    <strong><label for="cityDel">City</label></strong><br>
+                                                                    <input type="text" class="form-control"
+                                                                           th:value="${user.city}" id="cityDel"
+                                                                           name="city" readonly>
+                                                                    <strong><label for="ageDel">Surname</label></strong><br>
+                                                                    <input type="number" class="form-control"
+                                                                           th:value="${user.age}" id="ageDel"
+                                                                           name="age" readonly>
                                                                     <strong><label
                                                                             for="usernameDel">Username</label></strong><br>
                                                                     <input type="text" class="form-control"
@@ -204,8 +224,8 @@
                                                                            readonly>
                                                                     <select multiple class="form-control w-100"
                                                                             id="rolesDel" name="roles" readonly>
-                                                                        <option th:each="role : ${user.setRoles}"
-                                                                                th:text="${role.roleName}">
+                                                                        <option th:each="role : ${user.getRoles()}"
+                                                                                th:text="${role.name}">
                                                                         </option>
                                                                     </select>
 
@@ -239,16 +259,30 @@
                                 <form th:action="@{/admin/new}" th:object="${newUser}" th:method="POST">
                                     <div class="form-group row justify-content-center align-items-center">
                                         <div class="col-sm-3">
-                                            <strong><label for="name">FirstName</label></strong><br>
-                                            <input type="text" class="form-control" th:field="*{firstName}" id="name"
-                                                   required placeholder="FirstName">
+                                            <strong><label for="name">Name</label></strong><br>
+                                            <input type="text" class="form-control" th:field="*{name}" id="name"
+                                                   required placeholder="Name">
                                         </div>
                                     </div>
                                     <div class="form-group row justify-content-center align-items-center">
                                         <div class="col-sm-3">
-                                            <strong><label for="emailNew">Email</label></strong><br>
-                                            <input type="email" class="form-control" th:field="*{email}" id="emailNew"
-                                                   placeholder="Email" required>
+                                            <strong><label for="surnameNew">Surname</label></strong><br>
+                                            <input type="text" class="form-control" th:field="*{surname}" id="surnameNew"
+                                                   placeholder="Surname" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row justify-content-center align-items-center">
+                                        <div class="col-sm-3">
+                                            <strong><label for="cityNew">City</label></strong><br>
+                                            <input type="text" class="form-control" th:field="*{city}" id="cityNew"
+                                                   placeholder="City" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row justify-content-center align-items-center">
+                                        <div class="col-sm-3">
+                                            <strong><label for="ageNew">Age</label></strong><br>
+                                            <input type="number" class="form-control" th:field="*{age}" id="ageNew"
+                                                   placeholder="Age" required>
                                         </div>
                                     </div>
                                     <div class="form-group row justify-content-center align-items-center">
@@ -271,8 +305,8 @@
                                             <select multiple class="form-control w-100" id="rolesNew" name="roleNames">
                                                 <option
                                                         th:each="role : ${allRoles}"
-                                                        th:value="${role.getRoleName()}"
-                                                        th:text="${role.getRoleName()}">
+                                                        th:value="${role.getName()}"
+                                                        th:text="${role.getName()}">
                                                 </option>
                                             </select>
                                         </div>
