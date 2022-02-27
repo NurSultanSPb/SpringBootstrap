@@ -20,7 +20,7 @@
         <strong><span class="navbar-text text-white" th:text="${user.username}" }></span></strong>
         <span class="navbar-text text-white">&nbspwith roles:&nbsp</span>
         <span class="navbar-text text-white"><a th:each="role: ${user.getRoles()}"
-                                                th:text="${role.getName()}+' '"></a> </span>
+                                                th:text="${role.getNameWithoutRole()}+' '"></a> </span>
     </form>
     <ul class="navbar-nav float-lg-end">
         <li class="nav-item">
@@ -89,7 +89,7 @@
                                         <td th:utext="${user.city}">City</td>
                                         <td th:utext="${user.age}">Age</td>
                                         <td th:utext="${user.username}">Username</td>
-                                        <td><a th:each="role : ${user.getRoles()}" th:text="${role.getName()} + ' '">
+                                        <td><a th:each="role : ${user.getRoles()}" th:text="${role.getNameWithoutRole()} + ' '">
                                 </a>
                                         </td>
                                         <td>
